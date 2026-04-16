@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Derecho Administrativo · Universidad Kennedy 2025</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:        #16172b;
+  --ink-2:      #23243e;
+  --gold:       #c9a84c;
+  --gold-light: #e8c97e;
+  --gold-dim:   rgba(201,168,76,0.16);
+  --gold-line:  rgba(201,168,76,0.25);
+  --cream:      #f6f3ed;
+  --cream-2:    #edeae2;
+  --white:      #ffffff;
+  --accent:     #7c5c38;
+  --muted:      #68687e;
+  --border:     #ddd9d0;
+  --sidebar-w:  292px;
+  --header-h:   68px;
+  --radius:     12px;
+  --radius-sm:  8px;
+  --shadow:     0 2px 12px rgba(22,23,43,0.08);
+  --shadow-md:  0 6px 28px rgba(22,23,43,0.13);
+  --shadow-lg:  0 12px 48px rgba(22,23,43,0.18);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); overflow-x: hidden; }
+
+/* ── TOPBAR ── */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: var(--header-h); background: var(--ink); z-index: 200;
+  display: flex; align-items: center; padding: 0 24px; gap: 14px;
+  border-bottom: 1px solid rgba(201,168,76,0.2);
+}
+.topbar::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 55% 130% at 75% 50%, rgba(201,168,76,0.07) 0%, transparent 70%);
+}
+.burger { display: none; background: none; border: none; cursor: pointer; padding: 6px; color: var(--cream); flex-shrink: 0; line-height: 0; }
+.topbar-brand { display: flex; flex-direction: column; gap: 1px; }
+.topbar-title { font-family: 'Playfair Display', serif; font-size: 16.5px; font-weight: 700; color: #fff; letter-spacing: -0.01em; line-height: 1.1; }
+.topbar-title em { color: var(--gold-light); font-style: italic; }
+.topbar-sub { font-family: 'DM Mono', monospace; font-size: 9.5px; letter-spacing: 0.1em; color: #7777a0; text-transform: uppercase; }
+.topbar-sep { width: 1px; height: 30px; background: rgba(255,255,255,0.08); flex-shrink: 0; }
+.topbar-meta { display: flex; gap: 18px; }
+.tmeta { display: flex; align-items: center; gap: 6px; color: #7777a0; font-size: 12px; font-weight: 500; }
+.topbar-right { margin-left: auto; display: flex; gap: 10px; align-items: center; }
+.btn-top {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--gold-dim); border: 1px solid var(--gold-line);
+  color: var(--gold-light); font-size: 12px; font-weight: 600;
+  padding: 6px 14px; border-radius: 40px; cursor: pointer;
+  transition: background .2s, border-color .2s; text-decoration: none; white-space: nowrap;
+}
+.btn-top:hover { background: rgba(201,168,76,0.26); border-color: var(--gold); }
+
+/* ── SHELL ── */
+.shell { display: flex; margin-top: var(--header-h); min-height: calc(100vh - var(--header-h)); }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: var(--sidebar-w); flex-shrink: 0;
+  background: var(--ink-2);
+  position: fixed; top: var(--header-h); left: 0; bottom: 0;
+  overflow-y: auto; z-index: 100;
+  border-right: 1px solid rgba(255,255,255,0.04);
+  scrollbar-width: thin; scrollbar-color: rgba(201,168,76,0.18) transparent;
+}
+.sidebar::-webkit-scrollbar { width: 3px; }
+.sidebar::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.2); border-radius: 2px; }
+.sb-inner { padding: 16px 0 48px; }
+
+.mod-group { margin-bottom: 2px; }
+.mod-lbl {
+  font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold);
+  opacity: 0.8; padding: 14px 18px 7px;
+  display: flex; align-items: center; gap: 8px;
+}
+.mod-lbl::after { content: ''; flex: 1; height: 1px; background: var(--gold-line); }
+
+.cls-btn {
+  width: 100%; background: none; border: none; text-align: left;
+  cursor: pointer; padding: 0; display: block; position: relative; transition: none;
+}
+.cls-btn:hover .cls-inner { background: rgba(255,255,255,0.035); }
+.cls-btn.active .cls-inner { background: rgba(201,168,76,0.09); }
+.cls-btn.active::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px; background: var(--gold); border-radius: 0 2px 2px 0;
+}
+.cls-inner { padding: 9px 18px 9px 20px; display: flex; gap: 11px; align-items: flex-start; }
+.cls-num { font-family: 'DM Mono', monospace; font-size: 10.5px; font-weight: 500; color: var(--gold); opacity: 0.6; flex-shrink: 0; padding-top: 1px; min-width: 20px; }
+.cls-btn.active .cls-num { opacity: 1; }
+.cls-date { font-family: 'DM Mono', monospace; font-size: 9.5px; color: #55557a; margin-bottom: 2px; }
+.cls-title { font-size: 12px; font-weight: 600; color: #b0b0cc; line-height: 1.35; }
+.cls-btn.active .cls-title { color: var(--gold-light); }
+.cls-tags { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 5px; }
+.ctag { font-family: 'DM Mono', monospace; font-size: 8.5px; font-weight: 500; padding: 2px 6px; border-radius: 20px; letter-spacing: 0.03em; }
+.t-ppt  { background: rgba(234,179,8,0.11);  color: #b8860b; }
+.t-inf  { background: rgba(34,197,94,0.11);  color: #15803d; }
+.t-eval { background: rgba(239,68,68,0.11);  color: #b91c1c; }
+.t-ap   { background: rgba(139,92,246,0.11); color: #6d28d9; }
+.t-pdf  { background: rgba(59,130,246,0.11); color: #1d4ed8; }
+
+/* ── CONTENT ── */
+.content { margin-left: var(--sidebar-w); flex: 1; min-width: 0; padding: 44px 48px 80px; }
+.panel { display: none; animation: fadeIn .18s ease; }
+.panel.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Panel header */
+.panel-head { margin-bottom: 36px; padding-bottom: 26px; border-bottom: 1px solid var(--border); }
+.panel-eye { font-family: 'DM Mono', monospace; font-size: 10.5px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; display: flex; align-items: center; gap: 7px; }
+.eye-dot { width: 5px; height: 5px; background: var(--gold); border-radius: 50%; display: inline-block; flex-shrink: 0; }
+.panel-title { font-family: 'Playfair Display', serif; font-size: clamp(20px, 2.8vw, 30px); font-weight: 700; color: var(--ink); letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 10px; }
+.panel-desc { color: var(--muted); font-size: 14px; line-height: 1.68; max-width: 660px; }
+.panel-ptags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; }
+.ptag { background: var(--cream-2); border: 1px solid var(--border); color: var(--muted); font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; padding: 3px 11px; border-radius: 40px; }
+
+/* Section */
+.section { margin-bottom: 36px; }
+.sec-lbl { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.13em; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
+.sec-lbl::after { content: ''; flex: 1; height: 1px; background: var(--gold-dim); }
+
+/* ── RESOURCE CARDS ── */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.cards.single { grid-template-columns: 1fr; max-width: 520px; }
+.cards.two    { grid-template-columns: repeat(2, 1fr); }
+
+.rcard {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px 22px 18px;
+  display: flex; flex-direction: column; gap: 12px;
+  box-shadow: var(--shadow);
+  text-decoration: none; color: inherit;
+  transition: transform .18s, box-shadow .18s, border-color .18s;
+  position: relative; overflow: hidden;
+}
+.rcard::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 3px; border-radius: var(--radius) var(--radius) 0 0;
+  opacity: 0; transition: opacity .18s;
+}
+.rcard:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--gold); }
+.rcard:hover::before { opacity: 1; }
+
+.rcard.type-ppt::before  { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+.rcard.type-pdf::before  { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+.rcard.type-img::before  { background: linear-gradient(90deg, #10b981, #34d399); }
+.rcard.type-eval::before { background: linear-gradient(90deg, #ef4444, #f87171); }
+
+.rcard-top { display: flex; align-items: flex-start; gap: 14px; }
+.rcard-ico {
+  width: 42px; height: 42px; border-radius: 10px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.ico-ppt  { background: #fffbeb; }
+.ico-pdf  { background: #eff6ff; }
+.ico-img  { background: #f0fdf4; }
+.ico-eval { background: #fef2f2; }
+
+.rcard-meta {}
+.rcard-type { font-family: 'DM Mono', monospace; font-size: 9.5px; font-weight: 500; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
+.rcard-title { font-size: 14.5px; font-weight: 600; color: var(--ink); line-height: 1.3; }
+
+.rcard-desc { font-size: 13px; color: var(--muted); line-height: 1.6; flex: 1; }
+
+.rcard-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 4px; border-top: 1px solid var(--cream-2); margin-top: auto; }
+.rcard-cta { font-size: 12.5px; font-weight: 600; color: var(--accent); display: flex; align-items: center; gap: 5px; }
+.rcard-badge { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500; padding: 2px 8px; border-radius: 20px; }
+.rb-ppt  { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+.rb-pdf  { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
+.rb-img  { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+
+/* Coming soon */
+.coming {
+  background: var(--white); border: 1px dashed var(--border);
+  border-radius: var(--radius); padding: 64px 40px;
+  text-align: center; color: var(--muted);
+}
+.coming-ico { font-size: 40px; opacity: 0.35; margin-bottom: 16px; }
+.coming h3 { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--ink); margin-bottom: 6px; font-weight: 700; }
+.coming p { font-size: 13.5px; }
+
+/* Overlay mobile */
+.overlay { display: none; position: fixed; inset: var(--header-h) 0 0 0; background: rgba(22,23,43,0.5); z-index: 99; }
+.overlay.show { display: block; }
+
+/* Mobile */
+@media (max-width: 920px) {
+  :root { --sidebar-w: 280px; }
+  .sidebar { transform: translateX(-100%); transition: transform .26s cubic-bezier(.4,0,.2,1); }
+  .sidebar.open { transform: translateX(0); box-shadow: var(--shadow-lg); }
+  .content { margin-left: 0; padding: 28px 20px 60px; }
+  .burger { display: flex; }
+  .topbar-meta, .topbar-sep { display: none; }
+  .cards.two { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .cards { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <button class="burger" onclick="toggleSB()" aria-label="Menú">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+      <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
+  <div class="topbar-brand">
+    <div class="topbar-title">Derecho <em>Administrativo</em></div>
+    <div class="topbar-sub">Universidad Kennedy · 2025</div>
+  </div>
+  <div class="topbar-sep"></div>
+  <div class="topbar-meta">
+    <div class="tmeta">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      12 clases · abr–jul 2025
+    </div>
+    <div class="tmeta">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      Dr. Romei
+    </div>
+  </div>
+  <div class="topbar-right">
+    <a class="btn-top" href="https://drive.google.com/file/d/1C3dfC1kWwtwXW8dd-C6DiDee_5JsWKN4/view" target="_blank">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      Cronograma
+    </a>
+  </div>
+</header>
+
+<div class="overlay" id="ov" onclick="toggleSB()"></div>
+
+<div class="shell">
+
+<!-- ── SIDEBAR ── -->
+<nav class="sidebar" id="sb">
+  <div class="sb-inner">
+
+    <div class="mod-group">
+      <div class="mod-lbl">Planificación</div>
+      <button class="cls-btn" onclick="show('cronograma',this)">
+        <div class="cls-inner">
+          <div class="cls-num">●</div>
+          <div class="cls-text">
+            <div class="cls-title">Cronograma general</div>
+            <div class="cls-tags"><span class="ctag t-pdf">PDF</span></div>
+          </div>
+        </div>
+      </button>
+    </div>
+
+    <div class="mod-group">
+      <div class="mod-lbl">U1 · El D. Administrativo</div>
+      <button class="cls-btn active" onclick="show('c1',this)">
+        <div class="cls-inner"><div class="cls-num">01</div><div>
+          <div class="cls-date">08/04</div>
+          <div class="cls-title">Introducción + U1 parte 1</div>
+          <div class="cls-tags"><span class="ctag t-ppt">PPT</span></div>
+        </div></div>
+      </button>
+      <button class="cls-btn" onclick="show('c2',this)">
+        <div class="cls-inner"><div class="cls-num">02</div><div>
+          <div class="cls-date">15/04</div>
+          <div class="cls-title">U1 parte 2 · Reglamentos</div>
+          <div class="cls-tags"><span class="ctag t-ppt">PPT</span></div>
+        </div></div>
+      </button>
+    </div>
+
+    <div class="mod-group">
+      <div class="mod-lbl">U2 · Organización Adm.</div>
+      <button class="cls-btn" onclick="show('c3',this)">
+        <div class="cls-inner"><div class="cls-num">03</div><div>
+          <div class="cls-date">22/04</div>
+          <div class="cls-title">Organización Adm. parte 1</div>
+          <div class="cls-tags"><span class="ctag t-ppt">PPT</span><span class="ctag t-inf">Infografías</span></div>
+        </div></div>
+      </button>
+      <button class="cls-btn" onclick="show('c4',this)">
+        <div class="cls-inner"><div class="cls-num">04</div><div>
+          <div class="cls-date">29/04</div>
+          <div class="cls-title">Organización Adm. parte 2</div>
+          <div class="cls-tags"><span class="ctag t-ppt">PPT</span><span class="ctag t-ap">AP 2</span></div>
+        </div></div>
+      </button>
+    </div>
+
+    <div class="mod-group">
+      <div class="mod-lbl">U3 · Estructura del Estado</div>
+      <button class="cls-btn" onclick="show('c5',this)">
+        <div class="cls-inner"><div class="cls-num">05</div><div>
+          <div class="cls-date">06/05</div>
+          <div class="cls-title">Estructura y org. del Estado</div>
+          <div class="cls-tags"><span class="ctag t-ppt">PPT</span><span class="ctag t-eval">A1</span></div>
+        </div></div>
+      </button>
+    </div>
+
+    <div class="mod-group">
+      <div class="mod-lbl">U4 · Acto Administrativo</div>
+      <button class="cls-btn" onclick="show('c6',this)">
+        <div class="cls-inner"><div class="cls-num">06</div><div>
+          <div class="cls-date">13/05</div>
+          <div class="cls-title">Acto Administrativo parte 1</div>
+          <div class="cls-tags"><span class="ctag t-ppt">PPT</span><span class="ctag t-ap">AP 4</span></div>
+        </div></div>
+      </button>
+      <button class="cls-btn" onclick="show('c7',this)">
+        <div class="cls-inner"><div class="cls-num">07</div><div>
+          <div class="cls-date">20/05</div>
+          <div class="cls-title">Acto Administrativo parte 2</div>
+          <div class="cls-tags"><span class="ctag t-ppt">PPT</span></div>
+        </div></div>
+      </button>
+    </div>
+
+    <div class="mod-group">
+      <div class="mod-lbl">U5 · Procedimiento Adm.</div>
+      <button class="cls-btn" onclick="show('c8',this)">
+        <div class="cls-inner"><div class="cls-num">08</div><div>
+          <div class="cls-date">27/05</div>
+          <div class="cls-title">Procedimiento Administrativo</div>
+          <div class="cls-tags"><span class="ctag t-ppt">PPT</span><span class="ctag t-eval">A3</span></div>
+        </div></div>
+      </button>
+    </div>
+
+    <div class="mod-group">
+      <div class="mod-lbl">U6–U7 · Contratos Adm.</div>
+      <button class="cls-btn" onclick="show('c9',this)">
+        <div class="cls-inner"><div class="cls-num">09</div><div>
+          <div class="cls-date">10/06</div>
+          <div class="cls-title">Contratos administrativos</div>
+          <div class="cls-tags"><span class="ctag t-ppt">PPT</span></div>
+        </div></div>
+      </button>
+      <button class="cls-btn" onclick="show('c10',this)">
+        <div class="cls-inner"><div class="cls-num">10</div><div>
+          <div class="cls-date">17/06</div>
+          <div class="cls-title">Procedimientos de selección</div>
+          <div class="cls-tags"><span class="ctag t-ppt">PPT</span><span class="ctag t-eval">A5</span></div>
+        </div></div>
+      </button>
+    </div>
+
+    <div class="mod-group">
+      <div class="mod-lbl">U8–U9 · Cierre</div>
+      <button class="cls-btn" onclick="show('c11',this)">
+        <div class="cls-inner"><div class="cls-num">11</div><div>
+          <div class="cls-date">24/06</div>
+          <div class="cls-title">Contratos especiales parte 1</div>
+          <div class="cls-tags"><span class="ctag t-ppt">PPT</span><span class="ctag t-ap">AP 6</span></div>
+        </div></div>
+      </button>
+      <button class="cls-btn" onclick="show('c12',this)">
+        <div class="cls-inner"><div class="cls-num">12</div><div>
+          <div class="cls-date">01/07</div>
+          <div class="cls-title">U8 cierre + U9: Impugnación</div>
+          <div class="cls-tags"><span class="ctag t-ppt">PPT</span><span class="ctag t-eval">A7</span></div>
+        </div></div>
+      </button>
+    </div>
+
+  </div>
+</nav>
+
+<!-- ── CONTENT ── -->
+<main class="content">
+
+  <!-- CRONOGRAMA -->
+  <div id="panel-cronograma" class="panel">
+    <div class="panel-head">
+      <div class="panel-eye"><span class="eye-dot"></span>Planificación</div>
+      <div class="panel-title">Cronograma general</div>
+      <div class="panel-desc">Distribución semanal de clases, contenidos y evaluaciones. Abril–julio 2025.</div>
+    </div>
+    <div class="section">
+      <div class="cards single">
+        <a class="rcard type-pdf" href="https://drive.google.com/file/d/1C3dfC1kWwtwXW8dd-C6DiDee_5JsWKN4/view" target="_blank">
+          <div class="rcard-top">
+            <div class="rcard-ico ico-pdf">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </div>
+            <div class="rcard-meta">
+              <div class="rcard-type">Documento PDF</div>
+              <div class="rcard-title">Cronograma del curso 2025</div>
+            </div>
+          </div>
+          <div class="rcard-desc">Planificación completa de las 12 clases: fechas, unidades temáticas, evaluaciones parciales (A) y actividades prácticas (AP).</div>
+          <div class="rcard-footer">
+            <span class="rcard-cta">Abrir en Drive <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span>
+            <span class="rcard-badge rb-pdf">PDF</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLASE 1 -->
+  <div id="panel-c1" class="panel active">
+    <div class="panel-head">
+      <div class="panel-eye"><span class="eye-dot"></span>08 de abril · Clase 1</div>
+      <div class="panel-title">Introducción + U1: El Derecho Administrativo (parte 1)</div>
+      <div class="panel-desc">Concepto y finalidad del Derecho Administrativo. Distinción con el Derecho privado. Fuentes del ordenamiento administrativo argentino.</div>
+      <div class="panel-ptags"><span class="ptag">Concepto y finalidad</span><span class="ptag">D. público / D. privado</span><span class="ptag">Fuentes</span></div>
+    </div>
+    <div class="section">
+      <div class="sec-lbl">Materiales de clase</div>
+      <div class="cards single">
+        <a class="rcard type-ppt" href="https://docs.google.com/presentation/d/1KjETZZMMH50kEKStZYlqtwHOqh7FYhsl/edit" target="_blank">
+          <div class="rcard-top">
+            <div class="rcard-ico ico-ppt">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+            </div>
+            <div class="rcard-meta">
+              <div class="rcard-type">Presentación · Google Slides</div>
+              <div class="rcard-title">Introducción al Derecho Administrativo</div>
+            </div>
+          </div>
+          <div class="rcard-desc">Concepto, finalidad y ubicación del Derecho Administrativo en el sistema jurídico. Distinción público/privado. Fuentes formales y materiales.</div>
+          <div class="rcard-footer">
+            <span class="rcard-cta">Abrir presentación <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span>
+            <span class="rcard-badge rb-ppt">PPT</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLASE 2 -->
+  <div id="panel-c2" class="panel">
+    <div class="panel-head">
+      <div class="panel-eye"><span class="eye-dot"></span>15 de abril · Clase 2</div>
+      <div class="panel-title">U1: El Derecho Administrativo (parte 2)</div>
+      <div class="panel-desc">Los reglamentos y sus clases. Potestad reglamentaria del Poder Ejecutivo. Régimen jurídico exorbitante. La función administrativa.</div>
+      <div class="panel-ptags"><span class="ptag">Reglamentos</span><span class="ptag">Potestad reglamentaria</span><span class="ptag">Régimen exorbitante</span><span class="ptag">Función administrativa</span></div>
+    </div>
+    <div class="coming"><div class="coming-ico">📋</div><h3>Material en preparación</h3><p>La presentación de esta clase estará disponible próximamente.</p></div>
+  </div>
+
+  <!-- CLASE 3 -->
+  <div id="panel-c3" class="panel">
+    <div class="panel-head">
+      <div class="panel-eye"><span class="eye-dot"></span>22 de abril · Clase 3</div>
+      <div class="panel-title">U2: La Organización Administrativa (parte 1)</div>
+      <div class="panel-desc">Administración Pública: concepto y principios de organización. Persona Jurídica Pública en el CCyCN. Órgano y funcionario público.</div>
+      <div class="panel-ptags"><span class="ptag">Administración Pública</span><span class="ptag">Principios de organización</span><span class="ptag">PJ Pública · CCyCN</span><span class="ptag">Órgano y funcionario</span></div>
+    </div>
+    <div class="section">
+      <div class="sec-lbl">Presentación de clase</div>
+      <div class="cards single">
+        <a class="rcard type-ppt" href="https://docs.google.com/presentation/d/1zk8--gA8dtY4gHclDvUpjiDllXhZxO9T/edit" target="_blank">
+          <div class="rcard-top">
+            <div class="rcard-ico ico-ppt"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+            <div class="rcard-meta">
+              <div class="rcard-type">Presentación · Google Slides</div>
+              <div class="rcard-title">Organización Administrativa — parte 1</div>
+            </div>
+          </div>
+          <div class="rcard-desc">Administración Pública: concepto, principios y estructura. Persona jurídica pública según el CCyCN. Distinción órgano/funcionario.</div>
+          <div class="rcard-footer">
+            <span class="rcard-cta">Abrir presentación <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span>
+            <span class="rcard-badge rb-ppt">PPT</span>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="section">
+      <div class="sec-lbl">Interés Público</div>
+      <div class="cards single">
+        <a class="rcard type-ppt" href="https://docs.google.com/presentation/d/1xz9H9ewLoFLc7JIcCXuy-lr97Uetd50d/edit" target="_blank">
+          <div class="rcard-top">
+            <div class="rcard-ico ico-ppt"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+            <div class="rcard-meta">
+              <div class="rcard-type">Presentación · Google Slides</div>
+              <div class="rcard-title">Interés Público</div>
+            </div>
+          </div>
+          <div class="rcard-desc">El interés público como categoría jurídica y fundamento de la actividad administrativa. Distinción con el interés privado y el interés general.</div>
+          <div class="rcard-footer">
+            <span class="rcard-cta">Abrir presentación <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span>
+            <span class="rcard-badge rb-ppt">PPT</span>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="section">
+      <div class="sec-lbl">Infografías</div>
+      <div class="cards two">
+        <a class="rcard type-img" href="https://drive.google.com/file/d/1m-zHWxr2BI3zyqCEutV4e2lnnG6oCbKe/view" target="_blank">
+          <div class="rcard-top">
+            <div class="rcard-ico ico-img"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+            <div class="rcard-meta">
+              <div class="rcard-type">Infografía · Drive</div>
+              <div class="rcard-title">Personas públicas no estatales</div>
+            </div>
+          </div>
+          <div class="rcard-desc">Clasificación y caracterización de las personas públicas fuera de la estructura estatal directa.</div>
+          <div class="rcard-footer">
+            <span class="rcard-cta">Abrir <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span>
+            <span class="rcard-badge rb-img">IMG</span>
+          </div>
+        </a>
+        <a class="rcard type-img" href="https://drive.google.com/file/d/1F3ASPHmTPTZ_pzbohv2iekFhyyJNpUiX/view" target="_blank">
+          <div class="rcard-top">
+            <div class="rcard-ico ico-img"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+            <div class="rcard-meta">
+              <div class="rcard-type">Infografía · Drive</div>
+              <div class="rcard-title">Relaciones orgánicas</div>
+            </div>
+          </div>
+          <div class="rcard-desc">Diagrama de las relaciones interorgánicas e interadministrativas en la estructura de la Administración Pública.</div>
+          <div class="rcard-footer">
+            <span class="rcard-cta">Abrir <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span>
+            <span class="rcard-badge rb-img">IMG</span>
+          </div>
+        </a>
+        <a class="rcard type-img" href="https://drive.google.com/file/d/12wkOeeVrefusm585pshI1ZWEVsNWIfgb/view" target="_blank">
+          <div class="rcard-top">
+            <div class="rcard-ico ico-img"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+            <div class="rcard-meta">
+              <div class="rcard-type">Infografía · Jurisprudencia</div>
+              <div class="rcard-title">Fallo Vadell — CSJN</div>
+            </div>
+          </div>
+          <div class="rcard-desc">Infografía-resumen del fallo Vadell sobre responsabilidad extracontractual del Estado. Lectura obligatoria.</div>
+          <div class="rcard-footer">
+            <span class="rcard-cta">Abrir <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span>
+            <span class="rcard-badge rb-img">IMG</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLASES 4–12 coming soon con datos completos -->
+  <div id="panel-c4" class="panel">
+    <div class="panel-head">
+      <div class="panel-eye"><span class="eye-dot"></span>29 de abril · Clase 4 · AP 2</div>
+      <div class="panel-title">U2: La Organización Administrativa (parte 2)</div>
+      <div class="panel-desc">Competencia y jerarquía. Contiendas de competencia. Recusación y excusación. Improrrogabilidad de la competencia.</div>
+      <div class="panel-ptags"><span class="ptag">Competencia</span><span class="ptag">Jerarquía</span><span class="ptag">Recusación</span><span class="ptag">Improrrogabilidad</span></div>
+    </div>
+    <div class="coming"><div class="coming-ico">📋</div><h3>Material en preparación</h3><p>La presentación de esta clase estará disponible próximamente.</p></div>
+  </div>
+
+  <div id="panel-c5" class="panel">
+    <div class="panel-head">
+      <div class="panel-eye"><span class="eye-dot"></span>06 de mayo · Clase 5 · A1</div>
+      <div class="panel-title">U3: Estructura y organización del Estado</div>
+      <div class="panel-desc">Poderes Ejecutivo, Legislativo y Judicial. Organización descentralizada. Desconcentración, autonomía y autarquía. Sistema presupuestario. Emergencia económica.</div>
+      <div class="panel-ptags"><span class="ptag">Poder Ejecutivo</span><span class="ptag">Descentralización</span><span class="ptag">Autarquía</span><span class="ptag">Presupuesto</span></div>
+    </div>
+    <div class="coming"><div class="coming-ico">📋</div><h3>Material en preparación</h3><p>La presentación de esta clase estará disponible próximamente.</p></div>
+  </div>
+
+  <div id="panel-c6" class="panel">
+    <div class="panel-head">
+      <div class="panel-eye"><span class="eye-dot"></span>13 de mayo · Clase 6 · AP 4</div>
+      <div class="panel-title">U4: Acto Administrativo (parte 1)</div>
+      <div class="panel-desc">Acto y hecho administrativo. Noción de acto administrativo. Actos interorgánicos e interadministrativos. Requisitos esenciales. Tipos de actos.</div>
+      <div class="panel-ptags"><span class="ptag">Acto administrativo</span><span class="ptag">Requisitos esenciales</span><span class="ptag">Tipos de actos</span></div>
+    </div>
+    <div class="coming"><div class="coming-ico">📋</div><h3>Material en preparación</h3><p>La presentación de esta clase estará disponible próximamente.</p></div>
+  </div>
+
+  <div id="panel-c7" class="panel">
+    <div class="panel-head">
+      <div class="panel-eye"><span class="eye-dot"></span>20 de mayo · Clase 7</div>
+      <div class="panel-title">U4: Acto Administrativo (parte 2)</div>
+      <div class="panel-desc">Eficacia: notificación y publicación. Presunción de legitimidad. Vías de hecho. Silencio administrativo. Nulidad y anulabilidad. Revocación y saneamiento.</div>
+      <div class="panel-ptags"><span class="ptag">Eficacia</span><span class="ptag">Nulidad</span><span class="ptag">Revocación</span><span class="ptag">Saneamiento</span></div>
+    </div>
+    <div class="coming"><div class="coming-ico">📋</div><h3>Material en preparación</h3><p>La presentación de esta clase estará disponible próximamente.</p></div>
+  </div>
+
+  <div id="panel-c8" class="panel">
+    <div class="panel-head">
+      <div class="panel-eye"><span class="eye-dot"></span>27 de mayo · Clase 8 · A3</div>
+      <div class="panel-title">U5: Procedimiento Administrativo</div>
+      <div class="panel-desc">Principios del procedimiento. Ley 19.549. Expediente administrativo (Dec. 1759/72). Expediente digital. Ley 25.506. GDE. Partes, prueba, vista, notificación y conclusión.</div>
+      <div class="panel-ptags"><span class="ptag">Ley 19.549</span><span class="ptag">Expediente</span><span class="ptag">GDE</span><span class="ptag">Firma digital</span></div>
+    </div>
+    <div class="coming"><div class="coming-ico">📋</div><h3>Material en preparación</h3><p>La presentación de esta clase estará disponible próximamente.</p></div>
+  </div>
+
+  <div id="panel-c9" class="panel">
+    <div class="panel-head">
+      <div class="panel-eye"><span class="eye-dot"></span>10 de junio · Clase 9</div>
+      <div class="panel-title">U6: Contratos Administrativos</div>
+      <div class="panel-desc">Concepto y elementos. Evolución jurisprudencial. Normativa (Dec. 1023/01 y Dec. 1030/16). Principios. ONC. SIPRO. Transparencia. Contrataciones electrónicas.</div>
+      <div class="panel-ptags"><span class="ptag">Dec. 1023/01</span><span class="ptag">ONC · SIPRO</span><span class="ptag">Transparencia</span></div>
+    </div>
+    <div class="coming"><div class="coming-ico">📋</div><h3>Material en preparación</h3><p>La presentación de esta clase estará disponible próximamente.</p></div>
+  </div>
+
+  <div id="panel-c10" class="panel">
+    <div class="panel-head">
+      <div class="panel-eye"><span class="eye-dot"></span>17 de junio · Clase 10 · A5</div>
+      <div class="panel-title">U7: Procedimientos de selección</div>
+      <div class="panel-desc">Criterios de selección. Licitación y concurso (público y privado). Subasta. Clases. Garantías. Penalidades. Observaciones e impugnaciones.</div>
+      <div class="panel-ptags"><span class="ptag">Licitación</span><span class="ptag">Concurso</span><span class="ptag">Garantías</span><span class="ptag">Impugnaciones</span></div>
+    </div>
+    <div class="coming"><div class="coming-ico">📋</div><h3>Material en preparación</h3><p>La presentación de esta clase estará disponible próximamente.</p></div>
+  </div>
+
+  <div id="panel-c11" class="panel">
+    <div class="panel-head">
+      <div class="panel-eye"><span class="eye-dot"></span>24 de junio · Clase 11 · AP 6</div>
+      <div class="panel-title">U8: Contratos especiales (parte 1)</div>
+      <div class="panel-desc">Obra pública y concesión de obra pública. Servicio público: concepto, elementos y clasificación. Concesión de servicio público.</div>
+      <div class="panel-ptags"><span class="ptag">Obra pública</span><span class="ptag">Servicio público</span><span class="ptag">Concesión</span></div>
+    </div>
+    <div class="coming"><div class="coming-ico">📋</div><h3>Material en preparación</h3><p>La presentación de esta clase estará disponible próximamente.</p></div>
+  </div>
+
+  <div id="panel-c12" class="panel">
+    <div class="panel-head">
+      <div class="panel-eye"><span class="eye-dot"></span>01 de julio · Clase 12 · A7</div>
+      <div class="panel-title">U8 (cierre) + U9: Impugnación administrativa</div>
+      <div class="panel-desc">Empleo público (Ley 25.164). Régimen disciplinario. Legitimación. Recursos: reconsideración, jerárquico, alzada, revisión. Reclamo administrativo. Aclaratoria.</div>
+      <div class="panel-ptags"><span class="ptag">Ley 25.164</span><span class="ptag">Recursos adm.</span><span class="ptag">Empleo público</span><span class="ptag">Reclamo</span></div>
+    </div>
+    <div class="coming"><div class="coming-ico">📋</div><h3>Material en preparación</h3><p>La presentación de esta clase estará disponible próximamente.</p></div>
+  </div>
+
+</main>
+</div><!-- /shell -->
+
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.cls-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  window.scrollTo(0, 0);
+  if (window.innerWidth <= 920) {
+    document.getElementById('sb').classList.remove('open');
+    document.getElementById('ov').classList.remove('show');
+  }
+}
+function toggleSB() {
+  document.getElementById('sb').classList.toggle('open');
+  document.getElementById('ov').classList.toggle('show');
+}
+</script>
+</body>
+</html>
